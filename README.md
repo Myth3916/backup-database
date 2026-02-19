@@ -92,7 +92,6 @@ pg_restore -U postgres -d finance_db_restored finance_db_2026-02-19.dump
 - Возможность восстановить отдельные таблицы:
 `pg_restore -U postgres -d finance_db_restored -t users finance_db_2026-02-19.dump`
 
-**Краткая таблица команд**
 
 ### Краткая таблица команд
 
