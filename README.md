@@ -38,4 +38,69 @@ archive_mode = on
 archive_command = 'cp %p /backup/wal/%f'
 ```
 
+---
+
+## Задание 2. PostgreSQL
+
+### 2.1. Примеры команд резервного копирования и восстановления
+
+#### Вариант 1: Формат Plain SQL (текстовый)
+
+**Создание бэкапа:**
+```bash
+pg_dump -U postgres finance_db > finance_db_$(date +%F).sql
+```
+**Восстановление**:
+
+```bash
+# Создаём пустую БД
+createdb -U postgres finance_db_restored
+
+# Восстанавливаем данные
+psql -U postgres -d finance_db_restored < finance_db_2026-02-19.sql
+```
+
+**Пояснение**:
+
+- `>` — перенаправление вывода в файл
+- `date +%F` — автоматическая дата в имени файла (формат: `2026-02-19`)
+- `<` — подача файла на вход `psql`
+
+
+**Вариант 2: Формат Custom (бинарный, сжатый)**
+
+**Создание бэкапа** :
+
+```bash
+pg_dump -U postgres -Fc finance_db > finance_db_$(date +%F).dump
+```
+
+**Восстановление** :
+
+```bash
+# Создаём пустую БД
+createdb -U postgres finance_db_restored
+
+# Восстанавливаем данные
+pg_restore -U postgres -d finance_db_restored finance_db_2026-02-19.dump
+```
+
+**Пояснение** :
+
+- `-Fc` — формат Custom (сжатый)
+- `pg_restore` — утилита для восстановления бинарных бэкапов
+- Возможность восстановить отдельные таблицы:
+`pg_restore -U postgres -d finance_db_restored -t users finance_db_2026-02-19.dump`
+
+**Краткая таблица команд**
+
+### Краткая таблица команд
+
+| Операция | Формат | Команда |
+|----------|--------|---------|
+| **Бэкап** | Plain SQL | `pg_dump -U postgres finance_db > finance_db_$(date +%F).sql` |
+| **Восстановление** | Plain SQL | `psql -U postgres -d finance_db_restored < finance_db_2026-02-19.sql` |
+| **Бэкап** | Custom (бинарный) | `pg_dump -U postgres -Fc finance_db > finance_db_$(date +%F).dump` |
+| **Восстановление** | Custom (бинарный) | `pg_restore -U postgres -d finance_db_restored finance_db_2026-02-19.dump` |
+
 
