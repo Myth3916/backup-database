@@ -19,6 +19,7 @@
 **Пример команды (PostgreSQL):**
 ```bash
 pg_dump -U postgres finance_db > /backup/finance_db_$(date +%F).sql
+```
 
 #### 1.2. Восстановление данных за час до предполагаемой поломки
 **Решение** : PITR (Point-in-Time Recovery) на основе:
